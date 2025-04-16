@@ -23,12 +23,12 @@ A modern landing page for LinguaLink AI, a real-time language translation servic
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/LinguaLinkLanding.git
+git clone https://github.com/Il078/LinguaAI-copy-.git
 ```
 
 2. Navigate to the project directory:
 ```bash
-cd LinguaLinkLanding
+cd LinguaAI-copy-
 ```
 
 3. Open `index.html` in your browser or use a local server:
@@ -43,7 +43,7 @@ npx serve
 ## Project Structure
 
 ```
-LinguaLinkLanding/
+LinguaAI-copy-/
 ├── index.html          # Main landing page
 ├── styles.css          # Global styles
 ├── script.js           # JavaScript functionality
@@ -68,5 +68,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Contact
 
-Your Name - [@yourtwitter](https://twitter.com/yourtwitter)
-Project Link: [https://github.com/yourusername/LinguaLinkLanding](https://github.com/yourusername/LinguaLinkLanding) 
+Ibrohim Abdulloh - [@Il078](https://github.com/Il078)
+Project Link: [https://github.com/Il078/LinguaAI-copy-](https://github.com/Il078/LinguaAI-copy-) 

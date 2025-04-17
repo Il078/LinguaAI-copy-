@@ -536,4 +536,85 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Initial translation
   translateText();
+
+  // Integration Tools Auto-Sliding Animation
+  const initIntegrationSlider = () => {
+    const integrationTools = document.querySelectorAll('.integration-tool');
+    if (!integrationTools.length) return;
+
+    const dotsContainer = document.createElement('div');
+    dotsContainer.className = 'integration-dots';
+
+    // Create dots for each tool
+    integrationTools.forEach((_, index) => {
+      const dot = document.createElement('div');
+      dot.className = 'integration-dot';
+      if (index === 0) dot.classList.add('active');
+      dotsContainer.appendChild(dot);
+    });
+
+    // Add dots container after the integrations grid
+    const integrationsGrid = document.querySelector('.integrations-grid');
+    if (integrationsGrid) {
+      integrationsGrid.parentNode.insertBefore(dotsContainer, integrationsGrid.nextSibling);
+    }
+
+    // Find AWS tool and set it as initial active slide
+    const awsTool = Array.from(integrationTools).find(tool =>
+      tool.querySelector('h3')?.textContent.toLowerCase().includes('aws')
+    );
+    let currentIndex = awsTool ? Array.from(integrationTools).indexOf(awsTool) : 0;
+
+    // Set initial active states
+    integrationTools.forEach((tool, index) => {
+      if (index === currentIndex) {
+        tool.classList.add('active');
+      } else {
+        tool.classList.remove('active');
+      }
+    });
+
+    const slideDuration = 1500; // 1.5 seconds per slide
+
+    const updateSlides = () => {
+      // First, add sliding-out class to current tool
+      const currentTool = integrationTools[currentIndex];
+      currentTool.classList.add('sliding-out');
+
+      // Remove active class from all dots
+      document.querySelectorAll('.integration-dot').forEach(dot => dot.classList.remove('active'));
+
+      // After slide out animation
+      setTimeout(() => {
+        // Remove sliding-out class and reset position
+        currentTool.classList.remove('sliding-out');
+        currentTool.style.transform = 'translateX(100%)';
+        currentTool.style.opacity = '0';
+
+        // Update to next index
+        currentIndex = (currentIndex + 1) % integrationTools.length;
+
+        // Add active class to new current tool
+        integrationTools[currentIndex].classList.add('active');
+        document.querySelectorAll('.integration-dot')[currentIndex].classList.add('active');
+      }, 500);
+    };
+
+    // Initial setup
+    updateSlides();
+
+    // Start auto-sliding
+    setInterval(updateSlides, slideDuration);
+
+    // Add click handlers for dots
+    document.querySelectorAll('.integration-dot').forEach((dot, index) => {
+      dot.addEventListener('click', () => {
+        currentIndex = index;
+        updateSlides();
+      });
+    });
+  };
+
+  // Initialize the integration slider
+  initIntegrationSlider();
 });

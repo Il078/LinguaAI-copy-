@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const email = e.target.email.value;
       if (email) {
         console.log(`Signing up with: ${email}`);
-        alert('Thank you! We'll get in touch with you soon.');
+        alert("Thank you! We'll get in touch with you soon.");
         e.target.reset();
       } else {
         alert('Please enter a valid email.');
@@ -230,4 +230,310 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   });
+
+  // Interactive Demo Functionality
+  // Demo Translator
+  const demoTranslator = document.querySelector('.demo-translator');
+  if (!demoTranslator) return;
+
+  // Get DOM elements
+  const fromLanguage = document.getElementById('from-language');
+  const toLanguage = document.getElementById('to-language');
+  const inputText = document.getElementById('input-text');
+  const outputText = document.getElementById('output-text');
+  const swapButton = document.getElementById('swap-languages');
+  const clearInputButton = document.getElementById('clear-input');
+  const copyOutputButton = document.getElementById('copy-output');
+  const speakInputButton = document.getElementById('speak-input');
+  const speakOutputButton = document.getElementById('speak-output');
+  const industryButtons = document.querySelectorAll('.industry-btn');
+  const startListeningButton = document.getElementById('start-listening');
+  const transcriptionText = document.getElementById('transcription-text');
+
+  let currentIndustry = 'general';
+
+  // Language codes for speech synthesis
+  const languageCodes = {
+    'en': 'en-US',
+    'es': 'es-ES',
+    'fr': 'fr-FR',
+    'de': 'de-DE',
+    'it': 'it-IT',
+    'pt': 'pt-BR',
+    'ru': 'ru-RU',
+    'zh': 'zh-CN',
+    'ja': 'ja-JP',
+    'ko': 'ko-KR',
+    'ar': 'ar-SA'
+  };
+
+  // Expanded translations dictionary
+  const translations = {
+    en: {
+      es: {
+        general: {
+          "Hello": "Hola",
+          "How are you?": "¿Cómo estás?",
+          "Thank you": "Gracias",
+          "Good morning": "Buenos días",
+          "Good afternoon": "Buenas tardes",
+          "Good evening": "Buenas noches",
+          "Please": "Por favor",
+          "You're welcome": "De nada",
+          "Yes": "Sí",
+          "No": "No",
+          "I don't understand": "No entiendo",
+          "Could you repeat that?": "¿Podrías repetir eso?",
+          "What time is it?": "¿Qué hora es?",
+          "Where is...?": "¿Dónde está...?",
+          "How much is it?": "¿Cuánto cuesta?",
+          "I need help": "Necesito ayuda",
+          "Do you speak English?": "¿Hablas inglés?",
+          "I'm lost": "Estoy perdido",
+          "Can you help me?": "¿Puedes ayudarme?",
+          "I'm sorry": "Lo siento",
+          "Excuse me": "Disculpe"
+        }
+      },
+      fr: {
+        general: {
+          "Hello": "Bonjour",
+          "How are you?": "Comment allez-vous?",
+          "Thank you": "Merci",
+          "Good morning": "Bonjour",
+          "Good afternoon": "Bon après-midi",
+          "Good evening": "Bonsoir",
+          "Please": "S'il vous plaît",
+          "You're welcome": "De rien",
+          "Yes": "Oui",
+          "No": "Non",
+          "I don't understand": "Je ne comprends pas",
+          "Could you repeat that?": "Pouvez-vous répéter?",
+          "What time is it?": "Quelle heure est-il?",
+          "Where is...?": "Où est...?",
+          "How much is it?": "Combien ça coûte?",
+          "I need help": "J'ai besoin d'aide",
+          "Do you speak English?": "Parlez-vous anglais?",
+          "I'm lost": "Je suis perdu",
+          "Can you help me?": "Pouvez-vous m'aider?",
+          "I'm sorry": "Je suis désolé",
+          "Excuse me": "Excusez-moi"
+        }
+      }
+    }
+  };
+
+  // API Configuration
+  const API_KEY = 'AIzaSyAt-4Ohija4uGE38MiFEuBBsrkFKTIxJg8';
+  const TRANSLATION_API_URL = 'https://translation.googleapis.com/language/translate/v2';
+
+  // Voice recognition setup
+  if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
+    console.log('Web Speech API is supported in this browser');
+
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const recognition = new SpeechRecognition();
+
+    // Configure recognition settings
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    recognition.lang = 'en-US';
+
+    console.log('Speech recognition initialized with settings:', {
+      continuous: recognition.continuous,
+      interimResults: recognition.interimResults,
+      lang: recognition.lang
+    });
+
+    let isListening = false;
+
+    if (startListeningButton && transcriptionText) {
+      console.log('Voice recognition UI elements found');
+
+      startListeningButton.addEventListener('click', () => {
+        if (!isListening) {
+          try {
+            recognition.start();
+            console.log('Started listening');
+            isListening = true;
+            startListeningButton.innerHTML = '<i class="fas fa-stop"></i> Stop Listening';
+            startListeningButton.classList.add('listening');
+            transcriptionText.textContent = 'Listening...';
+          } catch (error) {
+            console.error('Error starting recognition:', error);
+            transcriptionText.textContent = `Error: ${error.message}`;
+          }
+        } else {
+          recognition.stop();
+          console.log('Stopped listening');
+          isListening = false;
+          startListeningButton.innerHTML = '<i class="fas fa-microphone"></i> Start Listening';
+          startListeningButton.classList.remove('listening');
+        }
+      });
+
+      recognition.onstart = () => {
+        console.log('Recognition started');
+      };
+
+      recognition.onresult = (event) => {
+        console.log('Recognition result received');
+        const transcript = Array.from(event.results)
+          .map(result => result[0].transcript)
+          .join('');
+
+        console.log('Transcribed text:', transcript);
+        transcriptionText.textContent = transcript;
+        inputText.value = transcript;
+        translateText();
+      };
+
+      recognition.onerror = (event) => {
+        console.error('Speech recognition error:', event.error);
+        transcriptionText.textContent = `Error: ${event.error}`;
+
+        // Provide more helpful error messages
+        if (event.error === 'not-allowed') {
+          transcriptionText.textContent = 'Error: Microphone access denied. Please allow microphone access in your browser settings.';
+        } else if (event.error === 'no-speech') {
+          transcriptionText.textContent = 'Error: No speech detected. Please try speaking again.';
+        } else if (event.error === 'audio-capture') {
+          transcriptionText.textContent = 'Error: No microphone found. Please connect a microphone and try again.';
+        }
+      };
+
+      recognition.onend = () => {
+        console.log('Recognition ended');
+        if (isListening) {
+          console.log('Restarting recognition');
+          recognition.start();
+        }
+      };
+    } else {
+      console.error('Voice recognition UI elements not found');
+    }
+  } else {
+    console.error('Web Speech API is not supported in this browser');
+    if (transcriptionText) {
+      transcriptionText.textContent = 'Error: Web Speech API is not supported in this browser. Please use a modern browser like Chrome, Edge, or Safari.';
+    }
+  }
+
+  // Translation function
+  async function translateText() {
+    const fromLang = fromLanguage.value;
+    const toLang = toLanguage.value;
+    const text = inputText.value.trim();
+
+    if (!text) return;
+
+    try {
+      // First try to use the local translations dictionary
+      if (translations[fromLang]?.[toLang]?.[currentIndustry]?.[text]) {
+        outputText.value = translations[fromLang][toLang][currentIndustry][text];
+        return;
+      }
+
+      // If no local translation found, use Google Translate API
+      const response = await fetch(`${TRANSLATION_API_URL}?key=${API_KEY}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          q: text,
+          source: fromLang,
+          target: toLang,
+          format: 'text'
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error(`Translation API error: ${response.status}`);
+      }
+
+      const data = await response.json();
+      if (data.data && data.data.translations && data.data.translations[0]) {
+        outputText.value = data.data.translations[0].translatedText;
+      } else {
+        throw new Error('Invalid translation response');
+      }
+    } catch (error) {
+      console.error('Translation error:', error);
+      outputText.value = `[Translation error: ${error.message}]`;
+    }
+  }
+
+  // Event listeners
+  fromLanguage.addEventListener('change', translateText);
+  toLanguage.addEventListener('change', translateText);
+  inputText.addEventListener('input', translateText);
+
+  swapButton.addEventListener('click', () => {
+    [fromLanguage.value, toLanguage.value] = [toLanguage.value, fromLanguage.value];
+    [inputText.value, outputText.value] = [outputText.value, inputText.value];
+  });
+
+  clearInputButton.addEventListener('click', () => {
+    inputText.value = '';
+    outputText.value = '';
+    transcriptionText.textContent = '';
+  });
+
+  copyOutputButton.addEventListener('click', () => {
+    outputText.select();
+    document.execCommand('copy');
+    copyOutputButton.innerHTML = '<i class="fas fa-check"></i>';
+    setTimeout(() => {
+      copyOutputButton.innerHTML = '<i class="fas fa-copy"></i>';
+    }, 2000);
+  });
+
+  // Speech synthesis
+  function speakText(text, lang) {
+    if (text) {
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = languageCodes[lang] || lang;
+      utterance.rate = 1.0;
+      utterance.pitch = 1.0;
+      utterance.volume = 1.0;
+
+      const voices = window.speechSynthesis.getVoices();
+      const voice = voices.find(v => v.lang.startsWith(lang)) || voices[0];
+      if (voice) {
+        utterance.voice = voice;
+      }
+
+      window.speechSynthesis.speak(utterance);
+    }
+  }
+
+  speakInputButton.addEventListener('click', () => {
+    speakText(inputText.value, fromLanguage.value);
+  });
+
+  speakOutputButton.addEventListener('click', () => {
+    speakText(outputText.value, toLanguage.value);
+  });
+
+  // Load voices
+  if (window.speechSynthesis.onvoiceschanged !== undefined) {
+    window.speechSynthesis.onvoiceschanged = () => {
+      window.speechSynthesis.getVoices();
+    };
+  }
+
+  // Industry selection
+  industryButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      industryButtons.forEach(btn => btn.classList.remove('active'));
+      button.classList.add('active');
+      currentIndustry = button.getAttribute('data-industry');
+      translateText();
+    });
+  });
+
+  // Initial translation
+  translateText();
 });

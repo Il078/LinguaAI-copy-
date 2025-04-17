@@ -32,7 +32,7 @@
   <section id="hero" class="animate fade-in">
     <div class="hero-content">
       <h1>AI-Powered Over-the-Phone Interpreting (OPI)</h1>
-      <p>Real-Time Speech Translation for Healthcare Call Centers</p>
+      <p>Real-Time Speech Translation for Global Business Communication</p>
       <div class="hero-stats">
         <div class="stat">
           <span class="stat-number">99.9%</span>
@@ -83,6 +83,79 @@
         </div>
       </div>
     </div>
+
+    <!-- Interactive Demo -->
+    <div class="interactive-demo">
+      <h3>Try It Yourself</h3>
+      <div class="demo-translator">
+        <div class="language-selector">
+          <div class="language-from">
+            <label for="from-language">From:</label>
+            <select id="from-language">
+              <option value="en">English</option>
+              <option value="es">Spanish</option>
+              <option value="fr">French</option>
+              <option value="de">German</option>
+              <option value="it">Italian</option>
+              <option value="pt">Portuguese</option>
+              <option value="ru">Russian</option>
+              <option value="zh">Chinese</option>
+              <option value="ja">Japanese</option>
+              <option value="ko">Korean</option>
+              <option value="ar">Arabic</option>
+            </select>
+          </div>
+          <div class="language-swap">
+            <button id="swap-languages"><i class="fas fa-exchange-alt"></i></button>
+          </div>
+          <div class="language-to">
+            <label for="to-language">To:</label>
+            <select id="to-language">
+              <option value="es">Spanish</option>
+              <option value="en">English</option>
+              <option value="fr">French</option>
+              <option value="de">German</option>
+              <option value="it">Italian</option>
+              <option value="pt">Portuguese</option>
+              <option value="ru">Russian</option>
+              <option value="zh">Chinese</option>
+              <option value="ja">Japanese</option>
+              <option value="ko">Korean</option>
+              <option value="ar">Arabic</option>
+            </select>
+          </div>
+        </div>
+        <div class="translation-area">
+          <div class="input-area">
+            <textarea id="input-text"
+              placeholder="Type or paste text here...">Hello, how can I help you today?</textarea>
+            <div class="input-controls">
+              <button id="clear-input"><i class="fas fa-times"></i></button>
+              <button id="speak-input"><i class="fas fa-volume-up"></i></button>
+              <button id="start-listening"><i class="fas fa-microphone"></i> Start Listening</button>
+            </div>
+            <div id="transcription-text" class="transcription-text"></div>
+          </div>
+          <div class="output-area">
+            <textarea id="output-text" readonly>¡Hola, cómo puedo ayudarte hoy?</textarea>
+            <div class="output-controls">
+              <button id="copy-output"><i class="fas fa-copy"></i></button>
+              <button id="speak-output"><i class="fas fa-volume-up"></i></button>
+            </div>
+          </div>
+        </div>
+        <div class="demo-industry-selector">
+          <p>Select industry context for better translation:</p>
+          <div class="industry-buttons">
+            <button class="industry-btn active" data-industry="general">General</button>
+            <button class="industry-btn" data-industry="healthcare">Healthcare</button>
+            <button class="industry-btn" data-industry="legal">Legal</button>
+            <button class="industry-btn" data-industry="travel">Travel</button>
+            <button class="industry-btn" data-industry="business">Business</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </section>
 
   <!-- Features Section -->
@@ -106,18 +179,28 @@
       </div>
       <div class="feature">
         <i class="fas fa-shield-alt"></i>
-        <h3>HIPAA Compliant</h3>
-        <p>Enterprise-grade security with end-to-end encryption for sensitive data.</p>
+        <h3>Enterprise Security</h3>
+        <p>Industry-specific compliance (HIPAA, GDPR, etc.) with end-to-end encryption.</p>
       </div>
       <div class="feature">
         <i class="fas fa-chart-bar"></i>
         <h3>Analytics Dashboard</h3>
-        <p>Comprehensive insights and metrics for call quality and translation performance.</p>
+        <p>Industry-specific metrics and insights for performance optimization.</p>
       </div>
       <div class="feature">
         <i class="fas fa-headset"></i>
         <h3>24/7 Support</h3>
-        <p>Round-the-clock technical support and assistance for seamless operations.</p>
+        <p>Round-the-clock technical support and industry-specific assistance.</p>
+      </div>
+      <div class="feature">
+        <i class="fas fa-industry"></i>
+        <h3>Industry-Specific Solutions</h3>
+        <p>Customized features for healthcare, legal, travel, and business sectors.</p>
+      </div>
+      <div class="feature">
+        <i class="fas fa-globe"></i>
+        <h3>Global Deployment</h3>
+        <p>Seamless integration with local infrastructure and compliance requirements.</p>
       </div>
     </div>
   </section>
@@ -205,7 +288,7 @@
     <h2>Why Choose LinguaLink AI?</h2>
     <div class="benefits-container">
       <div class="benefit-category">
-        <h3>For Healthcare Providers</h3>
+        <h3>For Healthcare & Medical</h3>
         <ul>
           <li><i class="fas fa-check"></i> Reduce wait times for non-English speaking patients</li>
           <li><i class="fas fa-check"></i> Improve patient satisfaction and outcomes</li>
@@ -214,21 +297,30 @@
         </ul>
       </div>
       <div class="benefit-category">
-        <h3>For Call Centers</h3>
+        <h3>For Travel & Hospitality</h3>
         <ul>
-          <li><i class="fas fa-check"></i> Handle international calls efficiently</li>
-          <li><i class="fas fa-check"></i> Reduce operational costs</li>
-          <li><i class="fas fa-check"></i> Scale operations globally</li>
-          <li><i class="fas fa-check"></i> Improve customer satisfaction</li>
+          <li><i class="fas fa-check"></i> Enhance guest experience across languages</li>
+          <li><i class="fas fa-check"></i> Streamline international bookings</li>
+          <li><i class="fas fa-check"></i> Provide 24/7 multilingual support</li>
+          <li><i class="fas fa-check"></i> Handle emergency situations effectively</li>
         </ul>
       </div>
       <div class="benefit-category">
         <h3>For Legal Services</h3>
         <ul>
-          <i class="fas fa-check"></i> Accurate legal terminology translation
-          <li><i class="fas fa-check"></i> Secure communication channels</li>
-          <li><i class="fas fa-check"></i> Document translation support</li>
-          <li><i class="fas fa-check"></i> Compliance with legal requirements</li>
+          <li><i class="fas fa-check"></i> Conduct multilingual client consultations</li>
+          <li><i class="fas fa-check"></i> Ensure accurate legal communication</li>
+          <li><i class="fas fa-check"></i> Handle international cases efficiently</li>
+          <li><i class="fas fa-check"></i> Maintain client confidentiality</li>
+        </ul>
+      </div>
+      <div class="benefit-category">
+        <h3>For Business & Enterprise</h3>
+        <ul>
+          <li><i class="fas fa-check"></i> Expand global operations seamlessly</li>
+          <li><i class="fas fa-check"></i> Reduce language barrier costs</li>
+          <li><i class="fas fa-check"></i> Improve international client relations</li>
+          <li><i class="fas fa-check"></i> Scale customer support globally</li>
         </ul>
       </div>
     </div>

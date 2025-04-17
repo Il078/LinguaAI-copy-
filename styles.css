@@ -3348,18 +3348,3 @@ footer::before {
         box-shadow: 0 0 0 0 rgba(231, 76, 60, 0);
     }
 }
-
-@media (max-width: 768px) {
-    body {
-        padding-top: 70px;
-        /* Adjust to match your fixed navbar height */
-    }
-
-    .navbar {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        z-index: 1000;
-    }
-}

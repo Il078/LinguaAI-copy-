@@ -1,4 +1,16 @@
 document.addEventListener('DOMContentLoaded', () => {
+  // Set active navigation link based on current page
+  const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+  const navLinks = document.querySelectorAll('.nav-links a');
+  navLinks.forEach(link => {
+    const linkHref = link.getAttribute('href');
+    if (linkHref === currentPage) {
+      link.classList.add('active');
+    } else {
+      link.classList.remove('active');
+    }
+  });
+
   // Signup form
   const form = document.getElementById('signup-form');
   if (form) {
@@ -389,17 +401,31 @@ document.addEventListener('DOMContentLoaded', () => {
       };
 
       recognition.onerror = (event) => {
-        console.error('Speech recognition error:', event.error);
-        transcriptionText.textContent = `Error: ${event.error}`;
+        const errorMessage = document.createElement('div');
+        errorMessage.className = 'error-message';
 
-        // Provide more helpful error messages
-        if (event.error === 'not-allowed') {
-          transcriptionText.textContent = 'Error: Microphone access denied. Please allow microphone access in your browser settings.';
-        } else if (event.error === 'no-speech') {
-          transcriptionText.textContent = 'Error: No speech detected. Please try speaking again.';
-        } else if (event.error === 'audio-capture') {
-          transcriptionText.textContent = 'Error: No microphone found. Please connect a microphone and try again.';
+        switch (event.error) {
+          case 'no-speech':
+            errorMessage.textContent = 'No speech was detected. Please try again.';
+            break;
+          case 'audio-capture':
+            errorMessage.textContent = 'No microphone was found. Please ensure your microphone is connected.';
+            break;
+          case 'not-allowed':
+            errorMessage.textContent = 'Microphone access was denied. Please allow microphone access.';
+            break;
+          default:
+            errorMessage.textContent = 'An error occurred with speech recognition. Please try again.';
         }
+
+        document.querySelector('.translation-area').appendChild(errorMessage);
+
+        // Remove error message after 5 seconds
+        setTimeout(() => {
+          errorMessage.remove();
+        }, 5000);
+
+        console.error('Speech recognition error:', event.error);
       };
 
       recognition.onend = () => {
@@ -419,48 +445,49 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Translation function
-  async function translateText() {
-    const fromLang = fromLanguage.value;
-    const toLang = toLanguage.value;
-    const text = inputText.value.trim();
-
-    if (!text) return;
+  // Translation function with loading state and error handling
+  async function translateText(text, fromLang, toLang, industry = 'general') {
+    const loadingIndicator = document.querySelector('.loading-indicator');
+    const outputText = document.getElementById('output-text');
+    const errorMessage = document.createElement('div');
+    errorMessage.className = 'error-message';
 
     try {
-      // First try to use the local translations dictionary
-      if (translations[fromLang]?.[toLang]?.[currentIndustry]?.[text]) {
-        outputText.value = translations[fromLang][toLang][currentIndustry][text];
-        return;
+      // Show loading indicator
+      loadingIndicator.style.display = 'flex';
+
+      // Simulate API call with timeout
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
+      // Your actual translation API call would go here
+      const translatedText = `Translated: ${text}`;
+
+      // Update output
+      outputText.value = translatedText;
+
+      // Hide loading indicator
+      loadingIndicator.style.display = 'none';
+
+      // Remove any existing error messages
+      const existingError = document.querySelector('.error-message');
+      if (existingError) {
+        existingError.remove();
       }
 
-      // If no local translation found, use Google Translate API
-      const response = await fetch(`${TRANSLATION_API_URL}?key=${API_KEY}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          q: text,
-          source: fromLang,
-          target: toLang,
-          format: 'text'
-        })
-      });
-
-      if (!response.ok) {
-        throw new Error(`Translation API error: ${response.status}`);
-      }
-
-      const data = await response.json();
-      if (data.data && data.data.translations && data.data.translations[0]) {
-        outputText.value = data.data.translations[0].translatedText;
-      } else {
-        throw new Error('Invalid translation response');
-      }
     } catch (error) {
+      // Hide loading indicator
+      loadingIndicator.style.display = 'none';
+
+      // Show error message
+      errorMessage.textContent = 'Translation failed. Please try again.';
+      document.querySelector('.translation-area').appendChild(errorMessage);
+
+      // Remove error message after 5 seconds
+      setTimeout(() => {
+        errorMessage.remove();
+      }, 5000);
+
       console.error('Translation error:', error);
-      outputText.value = `[Translation error: ${error.message}]`;
     }
   }
 

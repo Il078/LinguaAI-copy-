@@ -14,16 +14,17 @@
   <!-- Navigation -->
   <nav class="navbar">
     <div class="nav-content">
-      <div class="logo">
+      <a href="index.html" class="logo">
         <i class="fas fa-language"></i>
         <span>LinguaLink AI</span>
-      </div>
+      </a>
       <ul class="nav-links">
         <li><a href="index.html" class="active">Home</a></li>
         <li><a href="how-it-works.html">How It Works</a></li>
         <li><a href="benefits.html">Benefits</a></li>
         <li><a href="pricing.html">Pricing</a></li>
         <li><a href="contact.html">Contact</a></li>
+        <li><a href="blog.html">Blog</a></li>
       </ul>
     </div>
   </nav>
@@ -127,20 +128,25 @@
         </div>
         <div class="translation-area">
           <div class="input-area">
-            <textarea id="input-text"
-              placeholder="Type or paste text here...">Hello, how can I help you today?</textarea>
-            <div class="input-controls">
-              <button id="clear-input"><i class="fas fa-times"></i></button>
-              <button id="speak-input"><i class="fas fa-volume-up"></i></button>
-              <button id="start-listening"><i class="fas fa-microphone"></i> Start Listening</button>
+            <div class="loading-indicator" style="display: none;">
+              <div class="spinner"></div>
+              <span>Translating...</span>
             </div>
-            <div id="transcription-text" class="transcription-text"></div>
+            <textarea id="input-text" placeholder="Type or paste text here..."
+              aria-label="Input text for translation">Hello, how can I help you today?</textarea>
+            <div class="input-controls">
+              <button id="clear-input" aria-label="Clear input text"><i class="fas fa-times"></i></button>
+              <button id="speak-input" aria-label="Speak input text"><i class="fas fa-volume-up"></i></button>
+              <button id="start-listening" aria-label="Start voice recognition"><i class="fas fa-microphone"></i> Start
+                Listening</button>
+            </div>
+            <div id="transcription-text" class="transcription-text" aria-live="polite"></div>
           </div>
           <div class="output-area">
-            <textarea id="output-text" readonly>¡Hola, cómo puedo ayudarte hoy?</textarea>
+            <textarea id="output-text" readonly aria-label="Translated text">¡Hola, cómo puedo ayudarte hoy?</textarea>
             <div class="output-controls">
-              <button id="copy-output"><i class="fas fa-copy"></i></button>
-              <button id="speak-output"><i class="fas fa-volume-up"></i></button>
+              <button id="copy-output" aria-label="Copy translated text"><i class="fas fa-copy"></i></button>
+              <button id="speak-output" aria-label="Speak translated text"><i class="fas fa-volume-up"></i></button>
             </div>
           </div>
         </div>
